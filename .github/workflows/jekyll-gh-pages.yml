@@ -1,27 +1,17 @@
-# Sample workflow for deploying a Flask application to GitHub Pages
-name: Deploy Flask App with GitHub Pages
+# Workflow for deploying a Flask application to GitHub Pages (Windows)
+name: Deploy Flask App with GitHub Pages (Windows)
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches:
       - main
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-
 jobs:
-  # Deployment job
-  deploy:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -33,12 +23,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt  # Assuming you have a requirements.txt file
 
-      - name: Build Flask App
-        run: python app.py  # Replace 'app.py' with the filename of your Flask application
+      - name: Run Flask application
+        run: |
+          py -m pip install -U pip
+          py app.py  # Replace 'app.py' with the filename of your Flask application
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./  # Change this to the appropriate directory if your Flask app files are in a subdirectory
+          publish_dir: ./
 
